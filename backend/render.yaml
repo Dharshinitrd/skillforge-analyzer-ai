@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: skillforge-backend
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn main:app
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: FLASK_ENV
+        value: production
+      - key: FLASK_APP
+        value: main.py
+    disk:
+      name: sqlite-store
+      mountPath: /app/instance
+      sizeGB: 1

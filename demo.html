@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SkillForge AI – Intelligent Resume Screening Agent</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #070913;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(124, 58, 237, 0.12) 0px, transparent 45%),
+        radial-gradient(at 100% 0%, rgba(37, 99, 235, 0.1) 0px, transparent 45%),
+        radial-gradient(at 50% 100%, rgba(8, 145, 178, 0.08) 0px, transparent 50%);
+      background-attachment: fixed;
+    }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.35);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .glass-card-hover {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card-hover:hover {
+      background: rgba(15, 23, 42, 0.55);
+      border-color: rgba(124, 58, 237, 0.3);
+      box-shadow: 0 10px 30px -10px rgba(124, 58, 237, 0.25), 0 0 15px rgba(124, 58, 237, 0.1);
+      transform: translateY(-2px);
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 50%, #67e8f9 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .shimmer {
+      background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.05) 50%, rgba(255,255,255,0) 100%);
+      background-size: 200% 100%;
+      animation: shimmer-animation 1.5s infinite;
+    }
+    @keyframes shimmer-animation {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    /* Hide scrollbar */
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            darkBg: '#070913',
+            brandPurple: {
+              light: '#a78bfa',
+              DEFAULT: '#7c3aed',
+              dark: '#5b21b6',
+            },
+            brandBlue: {
+              light: '#60a5fa',
+              DEFAULT: '#2563eb',
+              dark: '#1e3a8a',
+            },
+            brandCyan: {
+              light: '#67e8f9',
+              DEFAULT: '#0891b2',
+              dark: '#155e75',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            outfit: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#070913] text-slate-100 font-sans h-full overflow-x-hidden">
+
+  <!-- ==================== LANDING PAGE ==================== -->
+  <div id="screen-landing" class="view flex flex-col min-h-screen">
+    <!-- Navbar -->
+    <header class="sticky top-0 z-50 w-full glass-card border-b border-slate-800/80 px-8 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brandPurple to-brandPurple-dark flex items-center justify-center font-outfit font-extrabold text-xl text-white">SF</div>
+        <div>
+          <h1 class="font-outfit font-bold text-lg leading-tight tracking-wider text-gradient">SkillForge AI</h1>
+          <span class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">Screening Agent</span>
+        </div>
+      </div>
+      <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-300">
+        <a href="#hero" class="hover:text-white transition-colors">Home</a>
+        <a href="#features" class="hover:text-white transition-colors">Features</a>
+        <a href="#about" class="hover:text-white transition-colors">About</a>
+      </nav>
+      <button onclick="switchScreen('upload')" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brandPurple to-brandBlue text-white font-medium text-sm hover:opacity-90 active:scale-95 transition-all">
+        Try Demo
+      </button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="flex flex-col items-center justify-center px-6 pt-20 pb-16 text-center max-w-5xl mx-auto relative">
+      <div class="flex flex-col items-center gap-6">
+        <div class="px-4 py-1.5 rounded-full border border-brandPurple/30 bg-brandPurple/5 text-brandPurple-light text-xs font-mono tracking-wider uppercase">
+          ⚡ Connected to Local Flask API
+        </div>
+        <h1 class="text-5xl md:text-7xl font-extrabold font-outfit leading-tight tracking-tight text-white max-w-4xl">
+          Recruitment, Forged with <span class="text-gradient">Intelligence</span>.
+        </h1>
+        <p class="text-lg md:text-xl text-slate-400 max-w-2xl font-light">
+          Automatically analyze resumes, compare candidates with job descriptions, calculate ATS scores, and generate AI hiring recommendations instantly.
+        </p>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-4 mt-10">
+        <button onclick="switchScreen('upload')" class="flex items-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-r from-brandPurple via-brandBlue to-brandCyan text-white font-semibold hover:opacity-95 transition-all active:scale-95">
+          <span>Upload Resume</span>
+        </button>
+        <button onclick="switchScreen('upload')" class="px-8 py-4 rounded-xl bg-slate-900 border border-slate-700/60 text-slate-200 font-semibold hover:bg-slate-800 hover:text-white transition-all active:scale-95">
+          Try Demo
+        </button>
+      </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="border-y border-slate-850 bg-slate-950/20 py-12">
+      <div class="max-w-6xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div class="flex flex-col gap-1">
+          <span class="text-4xl md:text-5xl font-extrabold font-outfit text-white">1000+</span>
+          <span class="text-xs font-medium uppercase tracking-wider text-slate-400 font-light">Resumes Analyzed</span>
+        </div>
+        <div class="flex flex-col gap-1 border-y md:border-y-0 md:border-x border-slate-850 py-6 md:py-0">
+          <span class="text-4xl md:text-5xl font-extrabold font-outfit text-white">95%</span>
+          <span class="text-xs font-medium uppercase tracking-wider text-slate-400 font-light">Accuracy Rate</span>
+        </div>
+        <div class="flex flex-col gap-1">
+          <span class="text-4xl md:text-5xl font-extrabold font-outfit text-white">10+</span>
+          <span class="text-xs font-medium uppercase tracking-wider text-slate-400 font-light">AI Metrics Tracked</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="max-w-6xl mx-auto px-6 py-20">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div class="glass-card p-8 rounded-2xl flex flex-col gap-4 border border-slate-800">
+          <div class="w-12 h-12 rounded-xl bg-brandPurple/10 flex items-center justify-center text-brandPurple-light text-2xl">⚡</div>
+          <h3 class="text-lg font-semibold font-outfit text-white">Resume Upload</h3>
+          <p class="text-sm text-slate-400 leading-relaxed font-light">Easily upload PDFs and DOCX files. Parser handles text mapping instantly.</p>
+        </div>
+        <div class="glass-card p-8 rounded-2xl flex flex-col gap-4 border border-slate-800">
+          <div class="w-12 h-12 rounded-xl bg-brandBlue/10 flex items-center justify-center text-brandBlue-light text-2xl">🧠</div>
+          <h3 class="text-lg font-semibold font-outfit text-white">Resume Parsing</h3>
+          <p class="text-sm text-slate-400 leading-relaxed font-light">Extract education, role timelines, project histories, and contact metrics.</p>
+        </div>
+        <div class="glass-card p-8 rounded-2xl flex flex-col gap-4 border border-slate-800">
+          <div class="w-12 h-12 rounded-xl bg-brandCyan/10 flex items-center justify-center text-brandCyan-light text-2xl">📈</div>
+          <h3 class="text-lg font-semibold font-outfit text-white">ATS Score</h3>
+          <p class="text-sm text-slate-400 leading-relaxed font-light">Calculate candidate compatibility match against standard parsing templates.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="mt-auto border-t border-slate-900 bg-slate-950/40 py-8 px-6 text-center text-xs text-slate-500 font-mono">
+      &copy; 2026 SkillForge AI. Connected with local Flask server.
+    </footer>
+  </div>
+
+
+  <!-- ==================== UPLOAD PAGE ==================== -->
+  <div id="screen-upload" class="view hidden min-h-screen flex flex-col items-center justify-center p-6 relative">
+    <button onclick="switchScreen('landing')" class="absolute top-10 left-10 flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+      <span>← Home</span>
+    </button>
+    <div class="w-full max-w-xl flex flex-col gap-6">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold font-outfit text-white">Upload Candidate Resume</h1>
+        <p class="text-slate-400 text-sm mt-2">Upload a single resume to begin intelligent screening evaluation.</p>
+      </div>
+
+      <!-- Drag & Drop Zone -->
+      <div id="dropzone" onclick="triggerFileInput()" class="glass-card rounded-2xl border-2 border-dashed border-slate-800 py-6 px-8 flex flex-col items-center justify-center gap-3 cursor-pointer hover:border-brandPurple/40 hover:bg-slate-900/10 transition-all min-h-[180px]">
+        <input type="file" id="file-input" onchange="handleFileSelected(event)" class="hidden" accept=".pdf,.docx">
+        <div class="w-16 h-16 rounded-2xl bg-brandPurple/10 flex items-center justify-center text-brandPurple-light text-3xl">☁️</div>
+        <div class="text-center" id="dropzone-text">
+          <p class="text-slate-200 font-semibold">Drag & Drop file here, or click to browse</p>
+          <p class="text-[11px] text-slate-500 font-mono mt-1">Acceptable formats: PDF, DOCX (Max 50MB)</p>
+        </div>
+      </div>
+
+      <!-- Upload Progress / File Status -->
+      <div id="upload-status-box" class="hidden">
+        <div class="flex items-center justify-between p-4 rounded-xl bg-slate-900/60 border border-slate-800">
+          <div class="flex items-center gap-3 overflow-hidden">
+            <div class="w-10 h-10 rounded-lg bg-brandBlue/10 flex items-center justify-center text-brandBlue-light text-xl">📄</div>
+            <div>
+              <p class="text-slate-200 text-sm font-semibold truncate" id="status-filename">resume.pdf</p>
+              <p class="text-[10px] text-slate-500 font-mono mt-0.5" id="status-filesize">0 KB</p>
+            </div>
+          </div>
+          <button onclick="clearUploadedFile()" class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white transition-colors">✕</button>
+        </div>
+        <div id="progress-bar-container" class="w-full flex flex-col gap-2 mt-4 hidden">
+          <div class="flex items-center justify-between text-xs text-slate-400">
+            <span>Parsing resume layout content...</span>
+            <span id="progress-pct">0%</span>
+          </div>
+          <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+            <div id="progress-bar-fill" class="h-full bg-gradient-to-r from-brandPurple to-brandCyan transition-all duration-300" style="width: 0%"></div>
+          </div>
+        </div>
+        <div id="upload-success-label" class="hidden text-emerald-400 text-xs mt-3 flex items-center gap-1.5 justify-center">✓ Successfully parsed resume data!</div>
+      </div>
+
+      <div id="upload-error-box" class="hidden p-4 rounded-xl bg-red-950/20 border border-red-900/30 text-red-400 text-xs text-center font-medium"></div>
+
+      <!-- Proceed Trigger -->
+      <button id="btn-proceed-jd" onclick="switchScreen('jd')" disabled class="flex items-center justify-center gap-2 w-full py-4 rounded-xl font-semibold text-sm bg-slate-900/60 border border-slate-800 text-slate-500 cursor-not-allowed transition-all">
+        <span>Configure Job Description</span> →
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ==================== JOB DESCRIPTION PAGE ==================== -->
+  <div id="screen-jd" class="view hidden min-h-screen flex flex-col items-center justify-center p-6 relative">
+    <button onclick="switchScreen('upload')" class="absolute top-10 left-10 flex items-center gap-2 text-slate-400 hover:text-white transition-colors">
+      <span>← Upload Resume</span>
+    </button>
+    <div class="w-full max-w-2xl flex flex-col gap-6">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold font-outfit text-white">Compare with Job Description</h1>
+        <p class="text-slate-400 text-sm mt-2">Paste your target requirements below or use a quick template.</p>
+      </div>
+
+      <!-- Selected resume badge -->
+      <div class="flex items-center gap-2.5 px-4 py-2.5 rounded-xl bg-slate-900/60 border border-slate-800 self-center">
+        <span class="text-xs text-slate-300 font-medium" id="jd-resume-pill">No resume selected</span>
+      </div>
+
+      <!-- Templates selector -->
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit">Quick Templates</label>
+        <div class="flex flex-wrap gap-2">
+          <button onclick="applyTemplate(0)" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-300 text-xs transition-colors">Java Full Stack</button>
+          <button onclick="applyTemplate(1)" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-300 text-xs transition-colors">Python Backend</button>
+          <button onclick="applyTemplate(2)" class="px-4 py-2 rounded-xl bg-slate-900 border border-slate-850 hover:bg-slate-800 text-slate-300 text-xs transition-colors">React Frontend</button>
+        </div>
+      </div>
+
+      <!-- Text Area -->
+      <div class="flex flex-col gap-2">
+        <label class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit">Job Requirements</label>
+        <textarea id="jd-textarea" class="w-full h-56 p-4 rounded-2xl bg-slate-900/40 border border-slate-800 text-slate-200 text-sm focus:border-brandPurple focus:ring-1 focus:ring-brandPurple/30 transition-all font-light resize-none leading-relaxed" placeholder="Describe the job duties, required tech stacks, and expected profiles..."></textarea>
+      </div>
+
+      <div id="jd-error-box" class="hidden p-4 rounded-xl bg-red-950/20 border border-red-900/30 text-red-400 text-xs text-center font-medium"></div>
+
+      <!-- Analyze trigger -->
+      <button onclick="triggerAnalysis()" class="flex items-center justify-center gap-2.5 w-full py-4 rounded-xl bg-gradient-to-r from-brandPurple to-brandBlue text-white font-semibold text-sm hover:opacity-95 transition-all">
+        <span>Analyze Resume using Gemini AI</span>
+      </button>
+    </div>
+  </div>
+
+
+  <!-- ==================== SYSTEM LOADING SCREEN ==================== -->
+  <div id="screen-loading" class="view hidden fixed inset-0 z-50 bg-[#070913]/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+    <div class="relative flex items-center justify-center w-36 h-36 mb-8">
+      <div class="absolute inset-0 rounded-full border-4 border-dashed border-brandPurple/30 animate-spin"></div>
+      <div class="absolute w-24 h-24 rounded-full border-2 border-brandCyan/20 animate-ping"></div>
+      <div class="w-20 h-20 rounded-full border-t-4 border-l-4 border-brandCyan animate-spin"></div>
+    </div>
+    <div>
+      <h3 class="text-lg font-bold font-outfit text-white">SkillForge Screen Intelligence</h3>
+      <p id="loading-msg" class="text-slate-400 text-sm mt-2 min-h-[40px] leading-relaxed">Formatting parsed parameters...</p>
+    </div>
+  </div>
+
+
+  <!-- ==================== DASHBOARD / REPORT VIEWS ==================== -->
+  <div id="screen-dashboard" class="view hidden flex h-screen bg-transparent overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-80 h-full glass-card border-r border-slate-800 flex flex-col justify-between p-6 shrink-0">
+      <div class="flex flex-col gap-8">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brandPurple to-brandCyan flex items-center justify-center font-outfit font-extrabold text-xl text-white">SF</div>
+          <div>
+            <h1 class="font-outfit font-bold text-lg leading-tight tracking-wider text-gradient">SkillForge AI</h1>
+            <span class="text-[10px] text-slate-400 font-mono tracking-widest uppercase">Screening Agent</span>
+          </div>
+        </div>
+        <nav class="flex flex-col gap-2">
+          <button id="sidebar-tab-dash" onclick="switchDashboardTab('dash')" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-brandPurple/20 to-brandBlue/10 border-l-4 border-brandPurple text-white text-sm font-medium transition-all text-left">
+            <span>📊 Dashboard</span>
+          </button>
+          <button id="sidebar-tab-sug" onclick="switchDashboardTab('sug')" class="flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/40 text-sm font-medium transition-all text-left">
+            <span>💡 AI Suggestions</span>
+          </button>
+        </nav>
+      </div>
+      <div class="flex flex-col gap-3">
+        <button onclick="downloadPdfReport()" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-gradient-to-r from-brandBlue to-brandCyan text-white font-medium text-sm hover:opacity-90 active:scale-95 transition-all shadow-neon-cyan/20">
+          <span>Download PDF Report</span>
+        </button>
+        <button onclick="resetFlow()" class="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700/60 font-medium text-sm active:scale-95 transition-all">
+          <span>New Screening</span>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Workspace container -->
+    <main class="flex-1 h-full overflow-y-auto p-8 flex flex-col gap-6" id="dashboard-tab-content">
+      
+      <!-- SUB-TAB 1: CORE DASHBOARD -->
+      <div id="tab-dashboard" class="flex flex-col gap-6 w-full">
+        <!-- Candidate Profile Header -->
+        <section class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-wrap items-center justify-between gap-6">
+          <div class="flex items-center gap-4">
+            <div class="w-14 h-14 rounded-full bg-gradient-to-tr from-brandPurple to-brandCyan flex items-center justify-center font-outfit font-extrabold text-2xl text-white" id="dash-avatar">J</div>
+            <div>
+              <h2 class="text-2xl font-bold font-outfit text-white leading-tight" id="dash-candidate-name">Candidate Name</h2>
+              <div class="flex flex-wrap gap-4 text-xs text-slate-400 mt-1.5">
+                <span class="flex items-center gap-1.5">📧 <span id="dash-email">email@example.com</span></span>
+                <span class="flex items-center gap-1.5">📞 <span id="dash-phone">+1 (555) 012-3456</span></span>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-col gap-1 items-end text-right">
+            <span class="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Hiring Advice</span>
+            <div class="px-4 py-2 rounded-xl border text-xs font-semibold uppercase tracking-wider bg-slate-900 border-slate-700/30 text-slate-400" id="dash-recommendation">RECOMMENDED</div>
+          </div>
+        </section>
+
+        <!-- Scores indicators -->
+        <section class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col items-center justify-center gap-2">
+            <div class="relative w-24 h-24 flex items-center justify-center">
+              <svg class="absolute w-full h-full transform -rotate-90">
+                <circle cx="48" cy="48" r="40" class="stroke-slate-800 fill-transparent" stroke-width="8"></circle>
+                <circle cx="48" cy="48" r="40" class="stroke-brandPurple fill-transparent" stroke-width="8" id="svg-ats-ring" stroke-dasharray="251.2" stroke-dashoffset="0"></circle>
+              </svg>
+              <span class="text-xl font-bold text-white" id="dash-ats-score">0%</span>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase font-outfit">ATS Score</span>
+          </div>
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col items-center justify-center gap-2">
+            <div class="relative w-24 h-24 flex items-center justify-center">
+              <svg class="absolute w-full h-full transform -rotate-90">
+                <circle cx="48" cy="48" r="40" class="stroke-slate-800 fill-transparent" stroke-width="8"></circle>
+                <circle cx="48" cy="48" r="40" class="stroke-brandBlue fill-transparent" stroke-width="8" id="svg-tech-ring" stroke-dasharray="251.2" stroke-dashoffset="0"></circle>
+              </svg>
+              <span class="text-xl font-bold text-white" id="dash-tech-score">0%</span>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase font-outfit">Technical Score</span>
+          </div>
+          <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col items-center justify-center gap-2">
+            <div class="relative w-24 h-24 flex items-center justify-center">
+              <svg class="absolute w-full h-full transform -rotate-90">
+                <circle cx="48" cy="48" r="40" class="stroke-slate-800 fill-transparent" stroke-width="8"></circle>
+                <circle cx="48" cy="48" r="40" class="stroke-brandCyan fill-transparent" stroke-width="8" id="svg-match-ring" stroke-dasharray="251.2" stroke-dashoffset="0"></circle>
+              </svg>
+              <span class="text-xl font-bold text-white" id="dash-match-score">0%</span>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400 tracking-wider uppercase font-outfit">Skill Match</span>
+          </div>
+        </section>
+
+        <!-- Summary -->
+        <section class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-3">
+          <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit">Resume Summary</h3>
+          <p class="text-sm text-slate-300 leading-relaxed font-light" id="dash-summary">No summary provided.</p>
+        </section>
+
+        <!-- Double Column -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          <!-- Experience & education -->
+          <div class="flex flex-col gap-6">
+            <!-- Timeline Experience -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">💼 Professional Experience</h3>
+              <div class="flex flex-col gap-6 pl-4 border-l border-slate-800 relative" id="dash-experience-container"></div>
+            </div>
+            <!-- Education -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">🎓 Education</h3>
+              <div class="flex flex-col gap-4" id="dash-education-container"></div>
+            </div>
+          </div>
+          <!-- Skills and factor chips -->
+          <div class="flex flex-col gap-6">
+            <!-- Skills list -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">🧭 Skills Found</h3>
+              <div class="flex flex-wrap gap-2" id="dash-skills-container"></div>
+            </div>
+            <!-- Strengths -->
+            <div class="glass-card rounded-2xl p-6 border border-emerald-950/20 bg-emerald-950/5 flex flex-col gap-3">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-emerald-400 font-outfit flex items-center gap-2">⭐ Key Strengths</h3>
+              <ul class="flex flex-col gap-2 text-xs text-slate-300 list-disc pl-4" id="dash-strengths-container"></ul>
+            </div>
+            <!-- Weaknesses -->
+            <div class="glass-card rounded-2xl p-6 border border-amber-950/20 bg-amber-950/5 flex flex-col gap-3">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-amber-400 font-outfit flex items-center gap-2">⚠️ Areas of Improvement</h3>
+              <ul class="flex flex-col gap-2 text-xs text-slate-300 list-disc pl-4" id="dash-weaknesses-container"></ul>
+            </div>
+            <!-- Missing Skills -->
+            <div class="glass-card rounded-2xl p-6 border border-rose-950/20 bg-rose-950/5 flex flex-col gap-3">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-rose-400 font-outfit flex items-center gap-2">❌ Missing Requirements</h3>
+              <div class="flex flex-wrap gap-2" id="dash-missing-container"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SUB-TAB 2: SUGGESTIONS -->
+      <div id="tab-suggestions" class="flex flex-col gap-6 w-full hidden">
+        <section class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-1">
+          <span class="text-[10px] text-slate-500 font-mono tracking-widest uppercase">Target Learning Path</span>
+          <h2 class="text-2xl font-bold font-outfit text-white leading-tight">AI SkillForge Suggestions</h2>
+          <p class="text-xs text-slate-400 mt-1">Customized developmental steps to increase candidate alignment.</p>
+        </section>
+        
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+          <div class="flex flex-col gap-6">
+            <!-- Improvements -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">📈 Resume Improvements</h3>
+              <ul class="flex flex-col gap-3 text-xs text-slate-300 list-disc pl-4" id="sug-improvements-container"></ul>
+            </div>
+            <!-- Recommended Tech -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">🔗 Recommended Technologies</h3>
+              <div class="flex flex-wrap gap-2" id="sug-techs-container"></div>
+            </div>
+          </div>
+          
+          <div class="flex flex-col gap-6">
+            <!-- Recommended Projects -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">💻 Practice Projects</h3>
+              <div class="flex flex-col gap-3" id="sug-projects-container"></div>
+            </div>
+            <!-- Recommended Courses -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">📚 Recommended Courses</h3>
+              <ul class="flex flex-col gap-3 text-xs text-slate-300 list-disc pl-4" id="sug-courses-container"></ul>
+            </div>
+            <!-- Recommended Certifications -->
+            <div class="glass-card rounded-2xl p-6 border border-slate-800 flex flex-col gap-4">
+              <h3 class="text-xs font-semibold uppercase tracking-wider text-slate-400 font-outfit flex items-center gap-2">🎗️ Recommended Certifications</h3>
+              <ul class="flex flex-col gap-3 text-xs text-slate-300 list-disc pl-4" id="sug-certs-container"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script>
+    // State management
+    let state = {
+      resumeId: null,
+      filename: "",
+      analysisData: null
+    };
+
+    const LOADING_MSGS = [
+      "Reading parsed resume tokens...",
+      "Injecting context into Gemini generative engine...",
+      "Mapping candidate skills against requirements...",
+      "Calculating ATS structure and alignment scores...",
+      "Checking projects, timelines, and credentials...",
+      "Formulating recommendation summaries...",
+      "Finalizing assessment metrics..."
+    ];
+
+    const TEMPLATES = [
+      "We are looking for a Java Full Stack Developer with Spring Boot, React, REST API, Docker, AWS and MySQL. Experience in designing clean, scalable architectures and optimizing database queries is highly preferred.",
+      "Seeking a Python Backend Engineer proficient in Python Flask/Django, SQLite/PostgreSQL, Redis, and RESTful API integrations. Candidates should have experience writing robust test suites and containerizing services using Docker.",
+      "Looking for a Frontend React Developer with expertise in React.js, Tailwind CSS, Vite, Redux/Context API, Framer Motion, and Axios integrations. Experience building highly interactive, responsive dashboards is a big plus."
+    ];
+
+    function switchScreen(screenId) {
+      document.querySelectorAll('.view').forEach(el => el.classList.add('hidden'));
+      document.getElementById(`screen-${screenId}`).classList.remove('hidden');
+    }
+
+    // --- UPLOAD FLOW ---
+    function triggerFileInput() {
+      if (!state.resumeId) {
+        document.getElementById('file-input').click();
+      }
+    }
+
+    function handleFileSelected(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+
+      if (file.size > 50 * 1024 * 1024) {
+        showUploadError("File size exceeds 50MB limit.");
+        return;
+      }
+
+      const ext = file.name.split('.').pop().toLowerCase();
+      if (ext !== 'pdf' && ext !== 'docx') {
+        showUploadError("Unsupported file type. Please select a PDF or DOCX file.");
+        return;
+      }
+
+      showUploadError("");
+      
+      // Update UI for progress simulation
+      document.getElementById('dropzone').classList.add('hidden');
+      document.getElementById('upload-status-box').classList.remove('hidden');
+      document.getElementById('status-filename').innerText = file.name;
+      document.getElementById('status-filesize').innerText = (file.size / 1024).toFixed(1) + " KB";
+      
+      document.getElementById('progress-bar-container').classList.remove('hidden');
+      document.getElementById('upload-success-label').classList.add('hidden');
+
+      let pct = 0;
+      const progressFill = document.getElementById('progress-bar-fill');
+      const progressText = document.getElementById('progress-pct');
+
+      // POST to Flask Backend
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const interval = setInterval(() => {
+        if (pct < 85) {
+          pct += 15;
+          progressFill.style.width = pct + "%";
+          progressText.innerText = pct + "%";
+        }
+      }, 100);
+
+      fetch('/api/upload', {
+        method: 'POST',
+        body: formData
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("Upload failed. Verify backend service state.");
+        return res.json();
+      })
+      .then(data => {
+        clearInterval(interval);
+        progressFill.style.width = "100%";
+        progressText.innerText = "100%";
+        
+        setTimeout(() => {
+          document.getElementById('progress-bar-container').classList.add('hidden');
+          document.getElementById('upload-success-label').classList.remove('hidden');
+          
+          state.resumeId = data.resume_id;
+          state.filename = data.filename;
+          
+          // Enable JD button
+          const jdBtn = document.getElementById('btn-proceed-jd');
+          jdBtn.disabled = false;
+          jdBtn.classList.remove('bg-slate-900/60', 'border-slate-800', 'text-slate-500', 'cursor-not-allowed');
+          jdBtn.classList.add('bg-gradient-to-r', 'from-brandPurple', 'to-brandBlue', 'text-white', 'hover:opacity-95', 'shadow-neon-purple/20');
+        }, 300);
+      })
+      .catch(err => {
+        clearInterval(interval);
+        showUploadError(err.message);
+        clearUploadedFile();
+      });
+    }
+
+    function clearUploadedFile() {
+      state.resumeId = null;
+      state.filename = "";
+      document.getElementById('file-input').value = "";
+      document.getElementById('upload-status-box').classList.add('hidden');
+      document.getElementById('dropzone').classList.remove('hidden');
+      
+      const jdBtn = document.getElementById('btn-proceed-jd');
+      jdBtn.disabled = true;
+      jdBtn.classList.add('bg-slate-900/60', 'border-slate-800', 'text-slate-500', 'cursor-not-allowed');
+      jdBtn.classList.remove('bg-gradient-to-r', 'from-brandPurple', 'to-brandBlue', 'text-white', 'hover:opacity-95', 'shadow-neon-purple/20');
+    }
+
+    function showUploadError(msg) {
+      const errBox = document.getElementById('upload-error-box');
+      if (msg) {
+        errBox.innerText = msg;
+        errBox.classList.remove('hidden');
+      } else {
+        errBox.classList.add('hidden');
+      }
+    }
+
+    // --- JD FLOW ---
+    function applyTemplate(index) {
+      document.getElementById('jd-textarea').value = TEMPLATES[index];
+      document.getElementById('jd-error-box').classList.add('hidden');
+    }
+
+    // Triggered when switching to JD page
+    window.addEventListener('click', () => {
+      if (!document.getElementById('screen-jd').classList.contains('hidden')) {
+        document.getElementById('jd-resume-pill').innerText = "📄 Selected: " + state.filename;
+        if (!document.getElementById('jd-textarea').value) {
+          applyTemplate(0);
+        }
+      }
+    });
+
+    // --- ANALYSIS FLOW ---
+    function triggerAnalysis() {
+      const jd = document.getElementById('jd-textarea').value;
+      const errBox = document.getElementById('jd-error-box');
+      if (!jd.trim()) {
+        errBox.innerText = "Please input a target Job Description.";
+        errBox.classList.remove('hidden');
+        return;
+      }
+      errBox.classList.add('hidden');
+
+      // Loading Screen
+      switchScreen('loading');
+      let msgIdx = 0;
+      const loadingEl = document.getElementById('loading-msg');
+      loadingEl.innerText = LOADING_MSGS[0];
+      
+      const msgInterval = setInterval(() => {
+        msgIdx = (msgIdx + 1) % LOADING_MSGS.length;
+        loadingEl.innerText = LOADING_MSGS[msgIdx];
+      }, 2000);
+
+      // POST to analyze endpoint
+      fetch('/api/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          resume_id: state.resumeId,
+          job_description: jd
+        })
+      })
+      .then(res => {
+        if (!res.ok) throw new Error("AI screening analysis failed.");
+        return res.json();
+      })
+      .then(data => {
+        clearInterval(msgInterval);
+        state.analysisData = data;
+        renderDashboard();
+        switchScreen('dashboard');
+      })
+      .catch(err => {
+        clearInterval(msgInterval);
+        switchScreen('jd');
+        errBox.innerText = err.message;
+        errBox.classList.remove('hidden');
+      });
+    }
+
+    // --- DASHBOARD RENDER ---
+    function renderDashboard() {
+      const data = state.analysisData;
+      
+      document.getElementById('dash-avatar').innerText = data.candidate_name ? data.candidate_name.charAt(0) : 'C';
+      document.getElementById('dash-candidate-name').innerText = data.candidate_name || 'Candidate';
+      document.getElementById('dash-email').innerText = data.email || 'N/A';
+      document.getElementById('dash-phone').innerText = data.phone || 'N/A';
+      document.getElementById('dash-summary').innerText = data.resume_summary || 'No summary available.';
+      
+      // Recommendation badge styling
+      const recBadg = document.getElementById('dash-recommendation');
+      recBadg.innerText = data.final_recommendation || 'RECOMMENDED';
+      recBadg.className = "px-4 py-2 rounded-xl border text-xs font-semibold uppercase tracking-wider ";
+      if (data.final_recommendation.includes('Highly')) {
+        recBadg.classList.add('bg-emerald-950/45', 'text-emerald-400', 'border-emerald-500/35');
+      } else if (data.final_recommendation.includes('Needs')) {
+        recBadg.classList.add('bg-amber-950/45', 'text-amber-400', 'border-amber-500/35');
+      } else if (data.final_recommendation.includes('Not')) {
+        recBadg.classList.add('bg-rose-950/45', 'text-rose-400', 'border-rose-500/35');
+      } else {
+        recBadg.classList.add('bg-blue-950/45', 'text-blue-400', 'border-blue-500/35');
+      }
+
+      // Circular Ring Gauges (Circumference = 251.2)
+      document.getElementById('dash-ats-score').innerText = data.ats_score + "%";
+      document.getElementById('svg-ats-ring').style.strokeDashoffset = 251.2 - (data.ats_score / 100) * 251.2;
+      
+      document.getElementById('dash-tech-score').innerText = data.technical_score + "%";
+      document.getElementById('svg-tech-ring').style.strokeDashoffset = 251.2 - (data.technical_score / 100) * 251.2;
+      
+      document.getElementById('dash-match-score').innerText = data.skill_match_percentage + "%";
+      document.getElementById('svg-match-ring').style.strokeDashoffset = 251.2 - (data.skill_match_percentage / 100) * 251.2;
+
+      // Professional Experience Timeline
+      const expContainer = document.getElementById('dash-experience-container');
+      expContainer.innerHTML = "";
+      if (data.experience && data.experience.length > 0) {
+        data.experience.forEach(item => {
+          expContainer.innerHTML += `
+            <div class="relative group">
+              <div class="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full bg-slate-900 border border-brandPurple"></div>
+              <div>
+                <h4 class="text-sm font-semibold text-white">${item.role}</h4>
+                <div class="flex justify-between items-center text-xs text-slate-400 mt-1">
+                  <span class="font-medium text-brandBlue-light">${item.company}</span>
+                  <span class="font-mono text-[10px]">${item.duration}</span>
+                </div>
+                <p class="text-xs text-slate-450 mt-2 leading-relaxed font-light">${item.description}</p>
+              </div>
+            </div>
+          `;
+        });
+      } else {
+        expContainer.innerHTML = "<p class='text-xs text-slate-500'>No experience detailed.</p>";
+      }
+
+      // Education Section
+      const eduContainer = document.getElementById('dash-education-container');
+      eduContainer.innerHTML = "";
+      if (data.education && data.education.length > 0) {
+        data.education.forEach(item => {
+          eduContainer.innerHTML += `
+            <div class="flex justify-between items-start gap-4">
+              <div>
+                <h4 class="text-sm font-semibold text-white">${item.degree}</h4>
+                <span class="text-xs text-brandPurple-light">${item.institution}</span>
+              </div>
+              <span class="text-[10px] text-slate-500 font-mono mt-1">${item.year}</span>
+            </div>
+          `;
+        });
+      } else {
+        eduContainer.innerHTML = "<p class='text-xs text-slate-500'>No education detailed.</p>";
+      }
+
+      // Skills Found List
+      const skillsContainer = document.getElementById('dash-skills-container');
+      skillsContainer.innerHTML = "";
+      if (data.skills && data.skills.length > 0) {
+        data.skills.forEach(skill => {
+          skillsContainer.innerHTML += `<span class="px-3.5 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 text-xs font-medium">${skill}</span>`;
+        });
+      }
+
+      // Strengths List
+      const strContainer = document.getElementById('dash-strengths-container');
+      strContainer.innerHTML = "";
+      if (data.strengths && data.strengths.length > 0) {
+        data.strengths.forEach(str => {
+          strContainer.innerHTML += `<li>${str}</li>`;
+        });
+      }
+
+      // Weaknesses List
+      const weakContainer = document.getElementById('dash-weaknesses-container');
+      weakContainer.innerHTML = "";
+      if (data.weaknesses && data.weaknesses.length > 0) {
+        data.weaknesses.forEach(weak => {
+          weakContainer.innerHTML += `<li>${weak}</li>`;
+        });
+      }
+
+      // Missing Skills List
+      const missContainer = document.getElementById('dash-missing-container');
+      missContainer.innerHTML = "";
+      if (data.missing_skills && data.missing_skills.length > 0) {
+        data.missing_skills.forEach(skill => {
+          missContainer.innerHTML += `<span class="px-3.5 py-1.5 rounded-xl bg-rose-950/20 border border-rose-900/30 text-rose-300 text-xs font-semibold">${skill}</span>`;
+        });
+      } else {
+        missContainer.innerHTML = "<p class='text-xs text-emerald-400 font-medium'>None! Matches all key targets.</p>";
+      }
+
+      // RENDER AI SUGGESTIONS SUB-TAB
+      const sug = data.suggestions || {};
+      
+      const impContainer = document.getElementById('sug-improvements-container');
+      impContainer.innerHTML = "";
+      (sug.resume_improvements || []).forEach(item => {
+        impContainer.innerHTML += `<li>${item}</li>`;
+      });
+
+      const techContainer = document.getElementById('sug-techs-container');
+      techContainer.innerHTML = "";
+      (sug.recommended_technologies || []).forEach(tech => {
+        techContainer.innerHTML += `<span class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-850 text-slate-350 text-xs font-mono font-medium">${tech}</span>`;
+      });
+
+      const projContainer = document.getElementById('sug-projects-container');
+      projContainer.innerHTML = "";
+      (sug.recommended_projects || []).forEach(proj => {
+        projContainer.innerHTML += `
+          <div class="p-4 rounded-xl bg-slate-900/40 border border-slate-850">
+            <p class="text-xs text-slate-300 leading-relaxed font-light">${proj}</p>
+          </div>
+        `;
+      });
+
+      const crsContainer = document.getElementById('sug-courses-container');
+      crsContainer.innerHTML = "";
+      (sug.recommended_courses || []).forEach(item => {
+        crsContainer.innerHTML += `<li>${item}</li>`;
+      });
+
+      const certContainer = document.getElementById('sug-certs-container');
+      certContainer.innerHTML = "";
+      (sug.recommended_certifications || []).forEach(item => {
+        certContainer.innerHTML += `<li>${item}</li>`;
+      });
+    }
+
+    function switchDashboardTab(tabName) {
+      const tabDash = document.getElementById('tab-dashboard');
+      const tabSug = document.getElementById('tab-suggestions');
+      const tabDashBtn = document.getElementById('sidebar-tab-dash');
+      const tabSugBtn = document.getElementById('sidebar-tab-sug');
+
+      if (tabName === 'dash') {
+        tabDash.classList.remove('hidden');
+        tabSug.classList.add('hidden');
+        
+        tabDashBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-brandPurple/20 to-brandBlue/10 border-l-4 border-brandPurple text-white text-sm font-medium transition-all text-left w-full";
+        tabSugBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/40 text-sm font-medium transition-all text-left w-full";
+      } else {
+        tabDash.classList.add('hidden');
+        tabSug.classList.remove('hidden');
+        
+        tabSugBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl bg-gradient-to-r from-brandPurple/20 to-brandBlue/10 border-l-4 border-brandPurple text-white text-sm font-medium transition-all text-left w-full";
+        tabDashBtn.className = "flex items-center gap-3 px-4 py-3 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800/40 text-sm font-medium transition-all text-left w-full";
+      }
+    }
+
+    // --- DOWNLOADING REPORT ---
+    function downloadPdfReport() {
+      const id = state.analysisData.id;
+      if (!id) return;
+
+      const url = `/api/report?analysis_id=${id}`;
+      fetch(url)
+      .then(res => {
+        if (!res.ok) throw new Error("Could not download report.");
+        return res.blob();
+      })
+      .then(blob => {
+        const link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        const name = state.analysisData.candidate_name ? state.analysisData.candidate_name.replace(/\s+/g, '_') : 'Candidate';
+        link.download = `SkillForge_Report_${name}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+      })
+      .catch(err => alert("Report generation failed: " + err.message));
+    }
+
+    function resetFlow() {
+      clearUploadedFile();
+      state.analysisData = null;
+      switchScreen('landing');
+      switchDashboardTab('dash');
+    }
+  </script>
+</body>
+</html>

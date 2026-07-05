@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: ../docker/backend.Dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - sqlite_data:/app/instance
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - FLASK_DEBUG=False
+      - DATABASE_PATH=instance/database.db
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: ../docker/frontend.Dockerfile
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: always
+
+volumes:
+  sqlite_data:
