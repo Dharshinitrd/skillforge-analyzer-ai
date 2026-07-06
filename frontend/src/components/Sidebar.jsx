@@ -15,34 +15,42 @@ function Sidebar({ analysisId, candidateName, startNewScreening }) {
   const navigate = useNavigate();
 
   const handleDownloadReport = async () => {
-    try {
-      const url = `/api/report?analysis_id=${analysisId}`;
-      
-      // Axios request with responseType blob
-      const response = await axios({
-        url: url,
-        method: 'GET',
-        responseType: 'blob', // Important
-      });
+  try {
+    const response = await axios({
+      url: `https://skillforge-analyzer-ai-1.onrender.com/api/report?analysis_id=${analysisId}`,
+      method: "GET",
+      responseType: "blob",
+    });
 
-      // Create local URL for the blob
-      const blobUrl = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = blobUrl;
-      
-      const cleanName = candidateName ? candidateName.replace(/\s+/g, '_') : 'Candidate';
-      link.setAttribute('download', `SkillForge_Report_${cleanName}.pdf`);
-      
-      document.body.appendChild(link);
-      link.click();
-      link.parentNode.removeChild(link);
-      window.URL.revokeObjectURL(blobUrl);
-    } catch (error) {
-      console.error("Failed to download PDF report:", error);
-      alert("Failed to download PDF report. Please verify backend status.");
+    const blob = new Blob([response.data], { type: "application/pdf" });
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = blobUrl;
+
+    const cleanName = candidateName
+      ? candidateName.replace(/\s+/g, "_")
+      : "Candidate";
+
+    link.download = `SkillForge_Report_${cleanName}.pdf`;
+
+    document.body.appendChild(link);
+    link.click();
+
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(blobUrl);
+
+  } catch (error) {
+    console.error("Download Error:", error);
+
+    if (error.response) {
+      console.log("Status:", error.response.status);
+      console.log(error.response.data);
     }
-  };
 
+    alert("Failed to download PDF report.");
+  }
+};
   const handleNewScreening = () => {
     startNewScreening();
     navigate('/upload');
