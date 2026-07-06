@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiUploadCloud, FiFileText, FiX, FiCheckCircle, FiArrowRight, FiArrowLeft } from 'react-icons/fi';
 import axios from 'axios';
+const API_URL = "https://skillforge-analyzer-ai-1.onrender.com";
 
 function UploadPage({ setResumeId, setFilename, filename, resumeId, startNewScreening }) {
   const [isDragActive, setIsDragActive] = useState(false);
@@ -78,11 +79,16 @@ function UploadPage({ setResumeId, setFilename, filename, resumeId, startNewScre
     }, 150);
 
     try {
-      const response = await axios.post("/api/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      });
+      const response = await axios.post(
+  "https://skillforge-analyzer-ai-1.onrender.com/api/upload",
+  formData,
+  {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  }
+);
+      
       
       clearInterval(progressInterval);
       setProgress(100);

@@ -64,10 +64,14 @@ function JobDescriptionPage({ resumeId, filename, jobDescription, setJobDescript
     setError("");
 
     try {
-      const response = await axios.post("/api/analyze", {
-        resume_id: resumeId,
-        job_description: jobDescription
-      });
+      const response = await axios.post(
+  "https://skillforge-analyzer-ai-1.onrender.com/api/analyze",
+  {
+    resume_id: resumeId,
+    job_description: jobDescription
+  }
+);
+    
 
       setAnalysisData(response.data);
       setLoading(false);
